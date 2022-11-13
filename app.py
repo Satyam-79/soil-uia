@@ -32,12 +32,8 @@ def upload():
     imageFile.save(uploadedFilePath)
 
     # Model
-    resultList = prediction_fun(UPLOAD, uploadedFilePath)
-
-    # Firebase Storage
-    # folderID = uploadRecord(
-    #     mainImagePath, PREDICTION, dictionaryList)  # Need Changes
+    result = prediction_fun(UPLOAD, uploadedFilePath)
 
     shutil.rmtree(UPLOAD)
 
-    return jsonify(status='Uploaded Successfully', prediction=resultList)
+    return jsonify(status='Uploaded Successfully', prediction=result)
