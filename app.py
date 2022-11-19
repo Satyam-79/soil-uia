@@ -14,10 +14,10 @@ BGRmodel = 'machineModel/savedWeights/bgrModel.sav'
 standardScaler = 'machineModel/savedWeights/std_scaler.bin'
 
 
-
 @app.route('/')
 def index():
-    result = prediction_fun(hsvRegressor, bgrRegressor,sc, uploadedFilePath='extra/82.jpg')
+    result = prediction_fun(hsvRegressor, bgrRegressor,
+                            sc, uploadedFilePath='82.jpg')
     HTML = f'''
     <div style="font-family:Arial;text-align:center;">
         <h1>unScrawl</h1>
@@ -42,12 +42,12 @@ def upload():
     imageFile.save(uploadedFilePath)
 
     # Model
-    result = prediction_fun(hsvRegressor, bgrRegressor, sc, uploadedFilePath)
+    result = prediction_fun(hsvRegressor, bgrRegressor,
+                            sc, uploadedFilePath='82.jpg')
 
     shutil.rmtree(UPLOAD)
 
     return jsonify(status='Uploaded Successfully', prediction=result)
-
 
 
 with app.app_context():
