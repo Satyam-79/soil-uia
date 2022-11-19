@@ -1,15 +1,7 @@
 import cv2
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-
-
-def limiting(value):
-    if value <= 0:
-        return 0
-    elif value >= 100:
-        return 100
-    else:
-        return value
+from machineModel.api import limiting
 
 
 def processImage(sc, uploadedFilePath):

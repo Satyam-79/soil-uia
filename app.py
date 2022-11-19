@@ -20,7 +20,7 @@ def index():
                             sc, uploadedFilePath='82.jpg')
     HTML = f'''
     <div style="font-family:Arial;text-align:center;">
-        <h1>unScrawl</h1>
+        <h1>Optical Moisture Detector</h1>
         <h3>API IS RUNNING!</h3>
         <h3>Moisture content: {result} </h3>
         
