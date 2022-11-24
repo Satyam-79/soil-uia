@@ -2,7 +2,9 @@ import cv2
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from machineModel.api import limiting
-
+from urllib.request import urlopen
+import json
+    
 
 
 def processImage(uploadedFilePath):
@@ -31,14 +33,29 @@ def processImage(uploadedFilePath):
     return  np.array(medianHSV)
 
 def weatherPrediction(weatherRegressor,w_sc):
-    print()
-    
+    url="https://api.weatherapi.com/v1/forecast.json?key=bc63089e69da4649b0571422222311&q=28.439422,77.508743&days=5"
+    parameters=['avgtemp_c','maxwind_kph','totalprecip_mm','avghumidity']
+
+    response = urlopen(url)
+    data_json = json.loads(response.read())
+    weather=[]
+    icons=[]
+    for i in range(5):
+      row=[]
+      for para in parameters:
+        row.append(data_json['forecast']['forecastday'][i]['day'][para])
+      icons.append(data_json['forecast']['forecastday'][i]['day']['condition']['icon'])
+      weather.append(row)
+      
+    prediction = weatherRegressor.predict(w_sc.transform(np.array(weather)))
+    prediction=prediction-1
+    print(prediction)
+    return weather,prediction,icons
 
 def prediction_fun(hsvRegressor,weatherRegressor, sc,w_sc, uploadedFilePath):
     medianHSV = processImage(uploadedFilePath)
 
     hsvPrediction = hsvRegressor.predict(sc.transform(medianHSV))
-    # bgrPrediction = bgrRegressor.predict(sc.transform(medianBGR))
 
     result = np.mean(hsvPrediction)
     
