@@ -17,8 +17,8 @@ weatherScaler = 'machineModel/savedWeights/weather_scaler.bin'
 
 @app.route('/')
 def index():
-    result = prediction_fun(hsvRegressor,
-                            sc, uploadedFilePath='82.jpg')
+    result = prediction_fun(hsvRegressor, weatherRegressor,
+                                sc,w_sc, uploadedFilePath='82.jpg')
     HTML = f'''
     <div style="font-family:Arial;text-align:center;">
         <h1>Optical Moisture Detector</h1>

@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestRegressor
 from machineModel.api import limiting
 
 
+
 def processImage(uploadedFilePath):
     medianHSV = []
 
@@ -29,12 +30,18 @@ def processImage(uploadedFilePath):
 
     return  np.array(medianHSV)
 
+def weatherPrediction(weatherRegressor,w_sc):
+    print()
+    
 
 def prediction_fun(hsvRegressor,weatherRegressor, sc,w_sc, uploadedFilePath):
-    medianHSV = processImage(sc, uploadedFilePath)
+    medianHSV = processImage(uploadedFilePath)
 
     hsvPrediction = hsvRegressor.predict(sc.transform(medianHSV))
     # bgrPrediction = bgrRegressor.predict(sc.transform(medianBGR))
 
     result = np.mean(hsvPrediction)
+    
+    weatherList=weatherPrediction(weatherRegressor,w_sc)
+    
     return limiting(int(result))
