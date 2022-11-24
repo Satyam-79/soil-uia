@@ -30,7 +30,7 @@ def processImage(uploadedFilePath):
     return  np.array(medianHSV)
 
 
-def prediction_fun(hsvRegressor, sc, uploadedFilePath):
+def prediction_fun(hsvRegressor,weatherRegressor, sc,w_sc, uploadedFilePath):
     medianHSV = processImage(sc, uploadedFilePath)
 
     hsvPrediction = hsvRegressor.predict(sc.transform(medianHSV))
