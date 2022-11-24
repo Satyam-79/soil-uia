@@ -10,22 +10,29 @@ app = Flask(__name__)
 
 UPLOAD = 'uploads/'
 HSVmodel = 'machineModel/savedWeights/hsvModel.sav'
-BGRmodel = 'machineModel/savedWeights/bgrModel.sav'
 standardScaler = 'machineModel/savedWeights/std_scaler.bin'
 
 
 @app.route('/')
 def index():
-    result = prediction_fun(hsvRegressor, bgrRegressor,
-                            sc, uploadedFilePath='82.jpg')
+    listOfFiles = list()
+    for (dirpath, dirnames, filenames) in os.walk("C:/Users/satya/Pictures/soil/ds"):
+        listOfFiles += [os.path.join(dirpath, file) for file in filenames]
+    results=[]
+    listOfFiles.sort()
+    print(listOfFiles)
+    for path in listOfFiles:
+        result = prediction_fun(hsvRegressor, bgrRegressor,
+                                sc, uploadedFilePath=path)
+        results.append(result)
     HTML = f'''
     <div style="font-family:Arial;text-align:center;">
         <h1>Optical Moisture Detector</h1>
         <h3>API IS RUNNING!</h3>
         <h3>Moisture content: {result} </h3>
-        
     </div>
         '''
+    print(results)
     return HTML
 
 
@@ -52,6 +59,6 @@ def upload():
 
 with app.app_context():
     hsvRegressor = load(HSVmodel)
-    bgrRegressor = load(BGRmodel)
     sc = load(standardScaler)
-# app.run()
+
+app.run(debug=True,host='0.0.0.0',port=5000)

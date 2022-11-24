@@ -4,9 +4,8 @@ from sklearn.ensemble import RandomForestRegressor
 from machineModel.api import limiting
 
 
-def processImage(sc, uploadedFilePath):
+def processImage(uploadedFilePath):
     medianHSV = []
-    medianBGR = []
 
     im = cv2.imread(uploadedFilePath)
     if im.shape[0] > im.shape[1]:
@@ -23,21 +22,19 @@ def processImage(sc, uploadedFilePath):
             y1 = y + M
             x1 = x + N
             img = im[y:y+M, x:x+N, :]
-            medianBGR.append([np.median(img[:, :, 0]), np.median(
-                img[:, :, 1]), np.median(img[:, :, 2])])
 
             img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             medianHSV.append([np.median(img[:, :, 0]), np.median(
                 img[:, :, 1]), np.median(img[:, :, 2])])
 
-    return np.array(medianBGR), np.array(medianHSV)
+    return  np.array(medianHSV)
 
 
-def prediction_fun(hsvRegressor, bgrRegressor, sc, uploadedFilePath):
-    medianBGR, medianHSV = processImage(sc, uploadedFilePath)
+def prediction_fun(hsvRegressor, sc, uploadedFilePath):
+    medianHSV = processImage(sc, uploadedFilePath)
 
     hsvPrediction = hsvRegressor.predict(sc.transform(medianHSV))
-    bgrPrediction = bgrRegressor.predict(sc.transform(medianBGR))
+    # bgrPrediction = bgrRegressor.predict(sc.transform(medianBGR))
 
-    result = (np.mean(hsvPrediction) + np.mean(bgrPrediction))/2
+    result = np.mean(hsvPrediction)
     return limiting(int(result))
